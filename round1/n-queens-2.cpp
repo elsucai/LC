@@ -8,7 +8,7 @@ public:
 		}
 		int mask = (1<<n)-1;	// n 1's in mask
 		int valid, bit;
-		// bit 1 int col means this col has been occupied
+		// bit 1 in col means this col has been occupied
 		// bit 1 in ld / rd means in current row, these positions are being attacked
 		
 		// for current row, check which columns are valid

@@ -7,6 +7,7 @@ struct KVT{
 
 class LRUCache{
 public:
+	static bool updated;
 	static long long time;
 	int size;
     unordered_map<int, KVT*> hm;
@@ -20,6 +21,7 @@ public:
 
 	LRUCache(int capacity) {
         size = capacity;
+		updated = false;
         time = 0;
     }
     
@@ -27,9 +29,11 @@ public:
 		KVT* ret;
         if(hm.find(key) != hm.end()){
 			ret = hm[key];
-			
 			time++;
 			ret->time = time;
+			if(key == elements.front()->key){
+				updated = true;
+			}
 //			make_heap(elements.begin(), elements.end(), comp);
 
 			return ret->value;
@@ -44,6 +48,9 @@ public:
 		if(-1 != get(key)){
 			hm[key]->value = value;
 			hm[key]->time = time;
+			if(key == elements.front()->key){
+				updated = true;
+			}
 		//	make_heap(elements.begin(), elements.end(), comp);
 		}
 		//insert a new key
@@ -55,7 +62,8 @@ public:
 		}
 		else{
 			//need to remove
-			make_heap(elements.begin(), elements.end(), comp);
+			if(updated)
+				make_heap(elements.begin(), elements.end(), comp);
 			tmp = elements.front();
 			hm.erase(tmp->key);
 			hm[key] = tmp;
@@ -63,8 +71,11 @@ public:
 			tmp->key = key;
 			tmp->value = value;
 			tmp->time = time;
+			make_heap(elements.begin(), elements.end(), comp);
+			updated = false;
 		}
     }
 };
 
 long long LRUCache::time = 0;
+bool LRUCache::updated = false;

@@ -1,81 +1,53 @@
-struct KVT{
+struct KV{
 	int key;
 	int value;
-	long long time;
-	KVT(int k, int v, long long t): key(k), value(v), time(t) {}
+	KV(int k, int v): key(k), value(v) {}
 };
 
 class LRUCache{
 public:
-	static bool updated;
-	static long long time;
 	int size;
-    unordered_map<int, KVT*> hm;
-	vector<KVT*> elements;
+    unordered_map<int, list<KV>::iterator> hm;
+	list<KV> elements;
 	
-	static bool comp(KVT* a, KVT* b){
-		if(a->time > b->time)
-			return true;
-		return false;
-	}
-
 	LRUCache(int capacity) {
         size = capacity;
-		updated = false;
-        time = 0;
     }
     
     int get(int key) {
-		KVT* ret;
+		int ret;
+		list<KV>::iterator it;
         if(hm.find(key) != hm.end()){
-			ret = hm[key];
-			time++;
-			ret->time = time;
-			if(key == elements.front()->key){
-				updated = true;
-			}
-//			make_heap(elements.begin(), elements.end(), comp);
+			it = hm[key];
+			ret = it->value;
+			elements.splice(elements.begin(), elements, it);
+			hm[key] = elements.begin();
 
-			return ret->value;
+			return ret;
 		}
 		return -1;
     }
     
     void set(int key, int value) {
-        KVT* tmp;
-		time++;
-
+		list<KV>::iterator it;
+		
 		if(-1 != get(key)){
-			hm[key]->value = value;
-			hm[key]->time = time;
-			if(key == elements.front()->key){
-				updated = true;
-			}
-		//	make_heap(elements.begin(), elements.end(), comp);
+			it = hm[key];
+			it->value = value;
+			elements.splice(elements.begin(), elements, it);
+			hm[key] = elements.begin();
 		}
 		//insert a new key
 		else if(elements.size() < size){
-			tmp = new KVT(key, value, time);
-			hm[key] = tmp;
-			elements.push_back(tmp);
-			push_heap(elements.begin(), elements.end(), comp);
+			elements.push_front(KV(key, value));
+			hm[key] = elements.begin();
 		}
 		else{
 			//need to remove
-			if(updated)
-				make_heap(elements.begin(), elements.end(), comp);
-			tmp = elements.front();
-			hm.erase(tmp->key);
-			hm[key] = tmp;
-			
-			tmp->key = key;
-			tmp->value = value;
-			tmp->time = time;
-			make_heap(elements.begin(), elements.end(), comp);
-			updated = false;
+			hm.erase(elements.back().key);
+			elements.pop_back();
+			elements.push_front(KV(key, value));
+			hm[key] = elements.begin();
 		}
     }
 };
-
-long long LRUCache::time = 0;
-bool LRUCache::updated = false;

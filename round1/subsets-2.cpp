@@ -12,6 +12,7 @@ public:
 				}
 			}
 			ret.push_back(tmp);
+			return;
 		}
 		
 		for(i = freq[s]; i >= 0; i--){
@@ -24,7 +25,7 @@ public:
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         
-		S.sort();
+		sort(S.begin(), S.end());
 		vector<int> unique;
 		vector<int> freq;
 		unordered_set<int> hs;
@@ -32,6 +33,7 @@ public:
 		for(int i = 0; i < S.size(); i++){
 			if(hs.find(S[i]) == hs.end()){
 				// not in the hash set
+				hs.insert(S[i]);
 				unique.push_back(S[i]);
 				freq.push_back(1);
 			}

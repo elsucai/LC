@@ -1,5 +1,6 @@
 class Solution {
 public:
+	/*
 	struct Pair{
 		int val;
 		int index;
@@ -37,4 +38,24 @@ public:
         }
         return ret;
     }
+	*/
+
+	vector<int> twoSum(vector<int> &numbers, int target) {
+		vector<int> ret;
+		int other;
+		if(numbers.size() < 2)
+			return ret;
+		unordered_map<int, int> hm;
+		for(int i = 0; i < numbers.size(); i++)
+			hm[numbers[i]] = i+1;
+		for(int i = 0; i < numbers.size(); i++){
+			other = target - numbers[i];
+			if(hm.find(other) != hm.end() && hm[other] != i+1){
+				ret.push_back(i+1);
+				ret.push_back(hm[other]);
+				return ret;
+			}
+		}
+		return ret;
+	}
 };

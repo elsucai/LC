@@ -25,3 +25,28 @@ public:
         return ret;
     }
 };
+
+class Solution {
+	public:
+		void helper(vector<vector<int> > &ret, vector<int> &one, int s, int e, int k){
+			if(k == 0){
+				ret.push_back(one);
+				return;
+			}
+			if(s > e)
+				return;
+			// push current element
+			one.push_back(s);
+			helper(ret, one, s+1, e, k-1);
+			one.pop_back();
+			// skip current element
+			helper(ret, one, s+1, e, k);
+		}
+
+		vector<vector<int> > combine(int n, int k) {
+			vector<vector<int> > ret;
+			vector<int> one;
+			helper(ret, one, 1, n, k);
+			return ret;
+		}
+};

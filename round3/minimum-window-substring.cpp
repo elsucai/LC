@@ -1,5 +1,58 @@
 class Solution {
 public:
+	/*
+	string minWindow(string S, string T) {
+		if(T.empty())
+			return "";
+		if(S.size() < T.size())
+			return "";
+		int minstart = 0;
+		unordered_map<char, int> freq;
+		unordered_map<char, int> found;
+		int cnt = 0;
+
+		for(int i = 0; i < T.size(); i++){
+			freq[T[i]]++;
+		}
+
+		int minlen = INT_MAX;
+		int start, end;
+		int n = S.size();
+		for(start = end = 0; end < n; end++){
+			if(freq.find(S[end]) != freq.end()){
+				found[S[end]]++;
+				if(found[S[end]] <= freq[S[end]])
+					cnt++;
+			}
+			if(cnt == T.size()){
+
+				while(start <= end){
+					if(freq.find(S[start]) == freq.end()){
+						start++;
+					}
+					else if(found[S[start]] > freq[S[start]]){
+						found[S[start]] --;
+						start++;
+					}
+					else{
+						break;
+					}
+				}
+				if(minlen > end-start+1){
+					minlen = end-start+1;
+					minstart = start;
+				}
+				found[S[start]]--;
+				start++;
+				cnt--;
+			}
+		}
+		if(minlen == INT_MAX)
+			return "";
+		return S.substr(minstart, minlen);
+	}
+	*/
+
     string minWindow(string S, string T) {
         // Note: The Solution object is instantiated only once and is reused by each test case.
 		int minwindow = INT_MAX;
